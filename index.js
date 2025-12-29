@@ -3,19 +3,23 @@ const http = require("http");
 const server = http.createServer((req, res) => {
   console.log(`Incoming request at [${Date.now}]`);
   console.log(req.url);
+  // Routing logic
   switch (req.url) {
     case "/":
-      req.writeHead(200);
+      res.writeHead(200, { "Content-Type": "text/plain" });
       return res.end(`homePage`);
 
     case "/about":
-      req.writeHead(200);
+      res.writeHead(200, { "Content-Type": "text/plain" });
       return res.end(`AboutPage`);
+
     case "/contact":
-      req.writeHead(200);
+      res.writeHead(200, { "Content-Type": "text/plain" });
       return res.end(`ContactPage`);
+
     default:
-      res.end("404 Page Not Found");
+      res.writeHead(404, { "Content-Type": "text/plain" });
+      return res.end("404 Page Not Found");
   }
 });
 
