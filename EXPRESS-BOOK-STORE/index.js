@@ -5,68 +5,45 @@ const PORT = 3000;
 
 // in memory book store
 let books = [
-  { id: 1, title: "1984", author: "George Orwell" },
-  { id: 2, title: "To Kill a Mockingbird", author: "Harper Lee" },
+  { id: 1, title: "Book One", author: "Author One" },
+  { id: 2, title: "Book Two", author: "Author Two" },
 ];
 
 // middleware to parse JSON bodies
 app.use(express.json());
 
+// routes
 app.get("/books", (req, res) => {
   res.json(books);
 });
 
 app.get("/books/:id", (req, res) => {
-  const bookId = parseInt(req.params.id);
-
-  if (isNaN(bookId)) {
-    return res.status(400).json({ error: "Book id must be a number" });
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).json({ error: "Id must be of type number" });
   }
 
-  const book = books.find((b) => b.id === bookId);
+  const book = books.find((e) => e.id === id);
 
   if (!book) {
     return res
       .status(404)
-      .json({ error: `The book id ${bookId} does not exist` });
+      .json({ error: "Book with id ${id} does not exist!" });
   }
   return res.json(book);
 });
 
 app.post("/books", (req, res) => {
+  // console.log(req.headers);
+  // console.log(req.body);
   const { title, author } = req.body;
-
-  if (!title || !author) {
-    return res.status(400).json({ error: "Title and author are required" });
+  if (!title || title === "") {
+    return res.status(400).json({ error: "Title is required" });
   }
-
-  const newBook = {
-    id: books.length + 1,
-    title,
-    author,
-  };
-
-  books.push(newBook);
-  return res.status(201).json(newBook);
+  return res.status(501).json({ error: "This route in under development" });
 });
 // Delete a book by id
-app.delete("/books/:id", (req, res) => {
-  const bookId = parseInt(req.params.id);
-  if (isNaN(bookId)) {
-    return res.status(400).json({ error: "Book id must be a number" });
-  }
-
-  const bookIndex = books.findIndex((b) => b.id === bookId);
-
-  if (bookIndex === -1) {
-    return res
-      .status(404)
-      .json({ error: `The book id ${bookId} does not exist` });
-  }
-
-  books.splice(bookIndex, 1);
-  return res.status(200).json({ message: "Book deleted successfully" });
-});
+app.delete("/books/:id", (req, res) => {});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
